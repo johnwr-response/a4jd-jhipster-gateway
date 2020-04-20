@@ -1,0 +1,78 @@
+<div>
+    <h2 id="page-heading">
+        <span>Speakers</span>
+
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-speaker" [routerLink]="['/speaker/new']">
+            <fa-icon icon="plus"></fa-icon>
+            <span>
+            Create a new Speaker
+            </span>
+        </button>
+    </h2>
+
+    <jhi-alert-error></jhi-alert-error>
+
+    <jhi-alert></jhi-alert>
+
+    <div class="alert alert-warning" id="no-result" *ngIf="speakers?.length === 0">
+        <span>No speakers found</span>
+    </div>
+
+    <div class="table-responsive" id="entities" *ngIf="speakers?.length > 0">
+        <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+                <tr>
+                    <th scope="col" ><span>ID</span></th>
+                    <th scope="col" ><span>First Name</span></th>
+                    <th scope="col" ><span>Last Name</span></th>
+                    <th scope="col" ><span>Email</span></th>
+                    <th scope="col" ><span>Twitter</span></th>
+                    <th scope="col" ><span>Bio</span></th>
+                    <th scope="col" ><span>Sessions</span></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let speaker of speakers ;trackBy: trackId">
+                    <td><a [routerLink]="['/speaker', speaker.id, 'view']">{{ speaker.id }}</a></td>
+                    <td>{{ speaker.firstName }}</td>
+                    <td>{{ speaker.lastName }}</td>
+                    <td>{{ speaker.email }}</td>
+                    <td>{{ speaker.twitter }}</td>
+                    <td>
+                        <a *ngIf="speaker.bio" (click)="openFile(speaker.bioContentType, speaker.bio)">open</a>
+                        <span *ngIf="speaker.bio">{{ speaker.bioContentType }}, {{ byteSize(speaker.bio) }}</span>
+                    </td>
+                    <td>
+                        <span *ngFor="let sessions of speaker.sessions; let last = last">
+                            <a class="form-control-static" [routerLink]="['/session', sessions?.id, 'view']">{{ sessions.id }}</a>{{ last ? '' : ', ' }}
+                        </span>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group">
+                            <button type="submit"
+                                    [routerLink]="['/speaker', speaker.id, 'view']"
+                                    class="btn btn-info btn-sm">
+                                <fa-icon icon="eye"></fa-icon>
+                                <span class="d-none d-md-inline">View</span>
+                            </button>
+
+                            <button type="submit"
+                                    [routerLink]="['/speaker', speaker.id, 'edit']"
+                                    class="btn btn-primary btn-sm">
+                                <fa-icon icon="pencil-alt"></fa-icon>
+                                <span class="d-none d-md-inline">Edit</span>
+                            </button>
+
+                            <button type="submit" (click)="delete(speaker)"
+                                    class="btn btn-danger btn-sm">
+                                <fa-icon icon="times"></fa-icon>
+                                <span class="d-none d-md-inline">Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

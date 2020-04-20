@@ -1,0 +1,106 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+            <h2 id="jhi-speaker-heading">Create or edit a Speaker</h2>
+
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+
+                <div class="form-group" [hidden]="!editForm.get('id')!.value">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id" formControlName="id" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_firstName">First Name</label>
+                    <input type="text" class="form-control" name="firstName" id="field_firstName"
+                           formControlName="firstName"/>
+                    <div *ngIf="editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('firstName')?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_lastName">Last Name</label>
+                    <input type="text" class="form-control" name="lastName" id="field_lastName"
+                           formControlName="lastName"/>
+                    <div *ngIf="editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('lastName')?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_email">Email</label>
+                    <input type="text" class="form-control" name="email" id="field_email"
+                           formControlName="email"/>
+                    <div *ngIf="editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('email')?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_twitter">Twitter</label>
+                    <input type="text" class="form-control" name="twitter" id="field_twitter"
+                           formControlName="twitter"/>
+                    <div *ngIf="editForm.get('twitter')!.invalid && (editForm.get('twitter')!.dirty || editForm.get('twitter')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('twitter')?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" for="field_bio">Bio</label>
+                    <div>
+                        <div *ngIf="editForm.get('bio')!.value" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(editForm.get('bioContentType')!.value, editForm.get('bio')!.value)">open</a><br>
+                            <span class="pull-left">{{ editForm.get('bioContentType')!.value }}, {{ byteSize(editForm.get('bio')!.value) }}</span>
+                            <button type="button" (click)="editForm.patchValue({bio: null});editForm.patchValue({bioContentType: null});"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon icon="times"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_bio" (change)="setFileData($event, 'bio', false)"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="bio" id="field_bio"
+                           formControlName="bio"/>
+                    <input type="hidden" class="form-control" name="bioContentType" id="field_bioContentType"
+                           formControlName="bioContentType" />
+                    <div *ngIf="editForm.get('bio')!.invalid && (editForm.get('bio')!.dirty || editForm.get('bio')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('bio')?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="field_sessions">Sessions</label>
+                    <select class="form-control" id="field_sessions" multiple name="sessions" formControlName="sessions">
+                        <option [ngValue]="getSelected(editForm.get('sessions')!.value, sessionOption)" *ngFor="let sessionOption of sessions; trackBy: trackById">{{ sessionOption.id }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+                    <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+                </button>
+
+                <button type="submit" id="save-entity" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
